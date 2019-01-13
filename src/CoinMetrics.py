@@ -62,23 +62,36 @@ class CoinMetrics:
         d = {}
         # print(feature['result'])
         for f in feature["result"]:
-            print(f)
+            # print(f)
             # f=f.replace("(usd)", "")
-            d[f] = self.get_asset_data_for_time_range(asset=asset, data_type=f, begin=begin, end=end)
+            tmp_array = self.get_asset_data_for_time_range(asset=asset, data_type=f, begin=begin, end=end)
+            for response in tmp_array["result"]:
+                # dictionary structure : dictionary[timestamp][feature] = value
+                if response[0] in d:
+                    d[response[0]][f] = response[1]
+                else:
+                    d[response[0]] = {}
+                    d[response[0]][f] = response[1]
         return d
     def get_all_asset_data_for_time_range(self, asset=["btc", "bch", "ltc", "eth", "etc"], begin=0, end=0):
         d = {}
-        print("asset: ", asset)
+        # print("asset: ", asset)
         for a in asset:
+            print("grabbing asset: {}".format(a))
             d[a] = self.get_assets_everything(asset=a, begin=begin, end=end)
         return d
     def update_database(self):
         print("update sequence initiated.")
-        print("obtaining data..")
+        print("downloading data..")
         self.coin = self.get_all_asset_data_for_time_range(begin=self.prev_time, end=self.current_time)
+        print("completed.")
+        print("inserting new data..")
         for coin_abb in self.coin:
-            print(COIN_CODE[coin_abb])
+            current_coin_code = COIN_CODE[coin_abb]
+            for timestamp in self.coin[coin_abb]:
+                print(self.coin[coin_abb][timestamp])
 if __name__ == "__main__":
     cm = CoinMetrics()
     cm.update_database()
-
+    # d = cm.get_assets_everything(asset="btc", begin=0, end=int(time.time()))
+    # print(d)
