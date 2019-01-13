@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_utils import database_exists, create_database
-from coinDB.config import *
+from .config import *
 
 
 ENGINE = create_engine('mysql+pymysql://%s:%s@localhost/%s'%(DATABASE_USRNAME, DATABASE_PWD, DATABASE_NAME), convert_unicode=True)
@@ -21,5 +21,5 @@ def init_db():
     if not database_exists(ENGINE.url):
         create_database(ENGINE.url)
     
-    from coinDB import model
+    from . import model
     Base.metadata.create_all(bind=ENGINE)

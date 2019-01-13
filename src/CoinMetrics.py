@@ -67,6 +67,8 @@ class CoinMetrics:
             tmp_array = self.get_asset_data_for_time_range(asset=asset, data_type=f, begin=begin, end=end)
             for response in tmp_array["result"]:
                 # dictionary structure : dictionary[timestamp][feature] = value
+                if response[1] is None:
+                    continue
                 if response[0] in d:
                     d[response[0]][f] = response[1]
                 else:
@@ -80,18 +82,105 @@ class CoinMetrics:
             print("grabbing asset: {}".format(a))
             d[a] = self.get_assets_everything(asset=a, begin=begin, end=end)
         return d
+    def insert_database(self, value=None, entry_id=None, feature=None):
+        if value is None or entry_id is None or feature is None:
+            print(feature, value, entry_id)
+            raise ValueError("missing essential value for database update. feature: {}, value: {}, entry_id: {}".format(feature, value, entry_id))
+        if feature == "activeaddresses":
+            new_row = active_address(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "adjustedtxvolume(usd)":
+            new_row = adjusted_tx_volume(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "averagedifficulty":
+            new_row = avg_difficulty(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "blockcount":
+            new_row = block_count(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "blocksize":
+            new_row = block_size(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "exchangevolume(usd)":
+            new_row = exchange_volume(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "fees":
+            new_row = fees(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "generatedcoins":
+            new_row = generated_coins(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "marketcap(usd)":
+            new_row = market_cap(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "medianfee":
+            new_row = median_fee(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "mediantxvalue(usd)":
+            new_row = median_tx_value(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "paymentcount":
+            new_row = payment_count(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "price(usd)":
+            new_row = price(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "realizedcap(usd)":
+            new_row = realized_cap(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "txcount":
+            new_row = tx_count(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        elif feature == "txvolume(usd)":
+            new_row = tx_volume(entry_id=entry_id, value=value)
+            self.DBsession.add(new_row)
+            self.DBsession.commit()
+        else:
+            raise ValueError("unexpected feature to insert into database: %s"%(feature))
+            
     def update_database(self):
         print("update sequence initiated.")
         print("downloading data..")
+        start_time = time.time()
         self.coin = self.get_all_asset_data_for_time_range(begin=self.prev_time, end=self.current_time)
-        print("completed.")
+        time_used = time.time() - start_time
+        print("completed. time used to download data: ", time_used)
         print("inserting new data..")
+        start_time = time.time()
         for coin_abb in self.coin:
+            print("processing %s...."%(coin_abb))
             current_coin_code = COIN_CODE[coin_abb]
             for timestamp in self.coin[coin_abb]:
-                print(self.coin[coin_abb][timestamp])
+                new_row = coin_date(coin_type=current_coin_code, unix_date=timestamp)
+                self.DBsession.add(new_row)
+                self.DBsession.commit()
+                # self.DBsession.refresh(new_row)
+                current_entry_id = new_row.entry_id
+                for feature in self.coin[coin_abb][timestamp]:
+                    self.insert_database(value=self.coin[coin_abb][timestamp][feature], \
+                                        entry_id=current_entry_id, \
+                                        feature = feature)
+        time_used = time.time() - start_time
+        print("completed. time used to update data: ", time_used)
 if __name__ == "__main__":
     cm = CoinMetrics()
     cm.update_database()
+    
+    # d = cm.get_available_data_type_for_asset(asset="btc")
     # d = cm.get_assets_everything(asset="btc", begin=0, end=int(time.time()))
     # print(d)
