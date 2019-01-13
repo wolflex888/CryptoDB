@@ -184,3 +184,5 @@ if __name__ == "__main__":
     # d = cm.get_available_data_type_for_asset(asset="btc")
     # d = cm.get_assets_everything(asset="btc", begin=0, end=int(time.time()))
     # print(d)
+    # 18.92251205444336 seconds to download data
+    # 182.5061640739441 seconds to update database
