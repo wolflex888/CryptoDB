@@ -97,6 +97,7 @@ if __name__ == "__main__":
             end = content
         elif opt in ["-h", "--help"]:
             usage()
+            sys.exit(1)
     
     if asset is None:
         print()
