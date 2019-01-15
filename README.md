@@ -17,6 +17,12 @@ The required package is in requirement.txt. Run the following command in the app
 
 `pip install -r requirement.txt`
 
+Following the installation above, run the following script:
+
+`python create_database.py`
+
+It will create a database named capital and create 17 tables included in it.
+
 ## Update database
 
 The script automatically get the maximum time stamp from the database and set it as the start of the time range, and current time as the end of the time range.
@@ -52,3 +58,5 @@ The script will parse the dictionary and return the data in the following format
 |-----|---------|
 
 `===================================================`
+
+# To be continued..
