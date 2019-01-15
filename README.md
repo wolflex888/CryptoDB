@@ -40,15 +40,15 @@ The current version of script only support querying a set of features listed abo
 
 `python query.py -a <one desired crypto coin> -f <set of feature separated by comma> -t <task> (only here for future work) -b <begin of time range> -e <end of time range> -h < bool, print usage >`
 
-The script will return the following:
+The script will parse the dictionary and return the data in the following format:
 
-|Date|Feature1|
+|Date(MM-DD-YYYY)|Feature1|
 |-----|---------|
 
 
 `===================================================`
 
-|Date|Feature2|
+|Date(MM-DD-YYYY)|Feature2|
 |-----|---------|
 
 `===================================================`
