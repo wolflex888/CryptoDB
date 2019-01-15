@@ -3,6 +3,7 @@ import requests
 import datetime
 import json
 import time
+import sys
 
 #sqlalchemy essentials
 from sqlalchemy import create_engine
@@ -14,9 +15,9 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
 #customized modules
-from coinDB.model import *
-from coinDB.config import *
-from coinDB.db import *
+from src.coinDB.model import *
+from src.coinDB.config import *
+from src.coinDB.db import *
 
     #######################################################
     ## ==== run time parameter for database update ===== ##
@@ -27,7 +28,7 @@ from coinDB.db import *
 
 class CoinMetrics:
     URL_BASE = "https://coinmetrics.io/api/v1/"
-    def __init__(self, api_base_url = URL_BASE):
+    def __init__(self, api_base_url = URL_BASE, asset = ["btc", "bch", "ltc", "eth", "etc"]):
         self.api_base_url = api_base_url
         self.timeout = 120 # time limit
         self.current_time = int(time.time())
@@ -39,7 +40,12 @@ class CoinMetrics:
         self.prev_time = self.DBsession.query(func.max(coin_date.unix_date)).scalar()
         if self.prev_time is None:
             self.prev_time = 0
-        self.avail_asset = ["btc", "bch", "ltc", "eth", "etc"]
+        if asset is None:
+            self.avail_asset = ["btc", "bch", "ltc", "eth", "etc"]
+        else:
+            self.avail_asset = asset
+        
+
 
     def __request(self, url):
         try:
@@ -84,9 +90,12 @@ class CoinMetrics:
                     d[response[0]] = {}
                     d[response[0]][f] = response[1]
         return d
-    def get_all_asset_data_for_time_range(self, asset=["btc", "bch", "ltc", "eth", "etc"], begin=0, end=0):
+    def get_all_asset_data_for_time_range(self, asset=None, begin=0, end=0):
         d = {}
         # print("asset: ", asset)
+        asset = self.avail_asset
+        if asset is None:
+            raise ValueError("Desired cryptocoin type not specified")
         for a in asset:
             print("grabbing asset: {}".format(a))
             d[a] = self.get_assets_everything(asset=a, begin=begin, end=end)
@@ -164,6 +173,7 @@ class CoinMetrics:
             
     def update_database(self):
         print("update sequence initiated.")
+        print("targeted crypto coin: %s"%(self.avail_asset))
         print("downloading data..")
         start_time = time.time()
         self.coin = self.get_all_asset_data_for_time_range(begin=self.prev_time, end=self.current_time)
@@ -188,8 +198,8 @@ class CoinMetrics:
         time_used = time.time() - start_time
         print("completed. time used to update data: ", time_used)
 if __name__ == "__main__":
-    cm = CoinMetrics()
-    cm.update_database()
+    print("this script is not meant to be executed directly. Exiting..")
+    sys.exit(1)
     
     # d = cm.get_available_data_type_for_asset(asset="btc")
     # d = cm.get_assets_everything(asset="btc", begin=0, end=int(time.time()))

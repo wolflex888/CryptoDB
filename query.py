@@ -1,6 +1,8 @@
 import sys
 import getopt
 import time
+import datetime
+import re
 
 from sqlalchemy import func
 
@@ -28,8 +30,15 @@ def parse(result={}):
     for key in result:
         print("time_stamp\t%s"%(key))
         for element in result[key]:
-            print("%s\t%s"%(element[0], element[1]))
-        print()
+            print("%s\t%s"%(datetime.datetime.fromtimestamp(element[0]).strftime("%m-%d-%Y"), element[1]))
+        print("=================================================================================")
+
+def check_date(date=None):
+    if re.match(r"[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]", date):
+        return True
+    else:
+        return False
+
 class DB:
     def __init__(self, assets=None, time_begin=None, time_end=None, feature=None):
 
@@ -119,7 +128,25 @@ if __name__ == "__main__":
         print()
         usage()
         sys.exit(1)
+    if check_date(begin):
+        begin = time.mktime(datetime.datetime.strptime(begin, "%m-%d-%Y").timetuple())
+    else:
+        print()
+        print("[Error]argument \"-b\" needs to follow the formate: MM-DD-YYYY")
+        print()
+        usage()
+        sys.exit(1)
     
+    if check_date(end):
+        end = time.mktime(datetime.datetime.strptime(end, "%m-%d-%Y").timetuple())
+    else:
+        print()
+        print("[Error]argument \"-e\" needs to follow the formate: MM-DD-YYYY")
+        print()
+        usage()
+        sys.exit(1)
+    
+
     qq = DB(assets=asset, time_begin=begin, time_end=end, feature=feature)
     result = qq.query()
     parse(result)
