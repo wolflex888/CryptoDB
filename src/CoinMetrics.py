@@ -3,6 +3,8 @@ import requests
 import datetime
 import json
 import time
+
+#sqlalchemy essentials
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
@@ -15,6 +17,13 @@ from requests.packages.urllib3.util.retry import Retry
 from coinDB.model import *
 from coinDB.config import *
 from coinDB.db import *
+
+    #######################################################
+    ## ==== run time parameter for database update ===== ##
+    ##     18.92251205444336 seconds to download data    ##
+    ##    182.5061640739441 seconds to update database   ##
+    ## ================================================= ##
+    #######################################################
 
 class CoinMetrics:
     URL_BASE = "https://coinmetrics.io/api/v1/"
@@ -171,6 +180,7 @@ class CoinMetrics:
                 self.DBsession.commit()
                 # self.DBsession.refresh(new_row)
                 current_entry_id = new_row.entry_id
+                # print(current_entry_id)
                 for feature in self.coin[coin_abb][timestamp]:
                     self.insert_database(value=self.coin[coin_abb][timestamp][feature], \
                                         entry_id=current_entry_id, \
@@ -184,5 +194,3 @@ if __name__ == "__main__":
     # d = cm.get_available_data_type_for_asset(asset="btc")
     # d = cm.get_assets_everything(asset="btc", begin=0, end=int(time.time()))
     # print(d)
-    # 18.92251205444336 seconds to download data
-    # 182.5061640739441 seconds to update database

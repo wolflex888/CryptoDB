@@ -1,5 +1,5 @@
 from .db import Base
-from sqlalchemy import Column, Integer, String, JSON, Boolean, Enum, ForeignKey, Float, Date
+from sqlalchemy import Column, Integer, String, JSON, Boolean, Enum, ForeignKey, Float, Date, DECIMAL, BigInteger, Numeric
 from sqlalchemy.orm import relationship
 
 # data of different cryptocoin includes the following column:
@@ -30,82 +30,82 @@ class coin_date(Base):
     block_size_r = relationship('block_size', backref='coin_date', lazy=True)
     block_count_r = relationship('block_count', backref='coin_date', lazy=True)
 
-class tx_volume(Base):
+class tx_volume(Base): #float
     __tablename__="tx_volume"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key = True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
-class adjusted_tx_volume(Base):
+class adjusted_tx_volume(Base): #float
     __tablename__="adjusted_tx_volume"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class tx_count(Base): #Integer
     __tablename__="tx_count"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(BigInteger, nullable=False)
 
 class market_cap(Base): #float
     __tablename__="market_cap"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class price(Base): #float
     __tablename__="price"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class exchange_volume(Base): #integer
     __tablename__="exchange_volume"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(BigInteger, nullable=False)
 
 class realized_cap(Base): #float
     __tablename__="realized_cap"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class generated_coins(Base): #integer
     __tablename__="generated_coins"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(BigInteger, nullable=False)
 
 class fees(Base): #float
     __tablename__="fees"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class active_address(Base): #integer
     __tablename__="active_address"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(BigInteger, nullable=False)
 
 class median_tx_value(Base): #float
     __tablename__="median_tx_value"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class median_fee(Base): #float
     __tablename__="median_fee"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class avg_difficulty(Base): #float
     __tablename__="avg_difficulty"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(DECIMAL(23,6), nullable=False)
 
 class payment_count(Base): #integer
     __tablename__="payment_count"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(BigInteger, nullable=False)
 
 class block_size(Base): #integer
     __tablename__="block_size"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(BigInteger, nullable=False)
 
 class block_count(Base): #integer
     __tablename__="block_count"
     entry_id = Column(Integer, ForeignKey('coin_date.entry_id'), primary_key=True)
-    value = Column(String(255), nullable=False)
+    value = Column(BigInteger, nullable=False)
