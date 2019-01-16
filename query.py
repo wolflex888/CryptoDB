@@ -47,7 +47,7 @@ def web_parse(result={}):
     array = []
     for key in result:
         for element in result[key]:
-            array.append([str(datetime.datetime.fromtimestamp(element[0])), str(element[1])])
+            array.append([str(datetime.datetime.fromtimestamp(element[0]).strftime("%m-%d-%Y")), str(element[1])])
     return array
 def check_date(date=None):
     if re.match(r"[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]", date):
