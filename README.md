@@ -59,4 +59,29 @@ The script will parse the dictionary and return the data in the following format
 
 `===================================================`
 
+# Web Application Backend
+
+The backend script uses Flask micro web frame work (http://flask.pocoo.org/). Simply initiate the script with the following command:
+
+`python web.py`
+
+The script should start running immediately given that the database was setup correctly with the procedure described above. The following message should be displayed right after the app is running:
+```
+* Serving Flask app "web" (lazy loading)
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 126-194-973
+ ```
+ The given internet address with "test" (`http://127.0.0.1:5000/test`) should direct you to the coinDB web interface page. The interface is shown below:
+
+
+![web picture](WebInterfacePic.png)
+ 
+
+
 # To be continued..
