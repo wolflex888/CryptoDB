@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <title>CoinDB</title>
+        <script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+        <script type = "text/javascript" src={{url_for('static', filename='d3/d3-queue.v3.min.js')}}></script>
+        <script type = "text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" media="screen" />
+  </head>
+      <body>
+           
+<h1>CoinDB Demo</h1>
+
+
+<p>Crypto Currency Type: <select id="selected_coin">
+  <option value="btc">Bitcoin</option>
+  <option value="bch">Bitcoin Cash</option>
+  <option value="ltc">Litecoin</option>
+  <option value="eth">Etherium</option>
+  <option value="etc">Etherium Cash</option>
+</select></p>
+<p>Time Range:  
+<input type=text size=5 name="num_day"> days </p>
+<p>Desired Feature: <select id="selected_feature">
+  <option value="txvolume">txVolume(USD)</option>
+  <option value="adjustedtxvolume">adjustedTxVolume(USD)</option>
+  <option value="txcount">txCount</option>
+  <option value="marketcap">marketcap(USD)</option>
+  <option value="price">price(USD)</option>
+  <option value="exchangevolume">exchangeVolume(USD)</option>
+  <option value="realizedcap">realizedCap(USD)</option>
+  <option value="generatedcoins">generatedCoins</option>
+  <option value="fees">fees</option>
+  <option value="activeaddress">activeAddresses</option>
+  <option value="averagedifficulty">averageDifficulty</option>
+  <option value="paymentcount">paymentCount</option>
+  <option value="mediantxvalue">medianTxValue(USD)</option>
+  <option value="medianfee">medianFee</option>
+  <option value="blocksize">blockSize</option>
+  <option value="blockcount">blockCount</option>
+</select></p>
+<a href=# id=start><button type="button">Submit!</button></a>
+
+<script type="text/javascript" src={{url_for('static', filename='main.js')}}>
+            </script>
+        <div class='container'>
+
+<table id="example" class="display" width="100%"></table>

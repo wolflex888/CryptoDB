@@ -43,6 +43,12 @@ def parse(result={}):
             print("%s\t%s"%(datetime.datetime.fromtimestamp(element[0]).strftime("%m-%d-%Y"), element[1]))
         print("=================================================================================")
 
+def web_parse(result={}):
+    array = []
+    for key in result:
+        for element in result[key]:
+            array.append([str(datetime.datetime.fromtimestamp(element[0])), str(element[1])])
+    return array
 def check_date(date=None):
     if re.match(r"[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]", date):
         return True
@@ -57,7 +63,7 @@ class DB:
         self.coin_code = COIN_CODE[assets]
         DBSession = sessionmaker(bind=ENGINE)
         self.DBsession = DBSession()
-        self.feature = feature
+        self.feature = feature.split(",")
         self.feature_dict = {"activeaddress": active_address,
                         "adjustedtxvolume": adjusted_tx_volume,
                         "averagedifficulty": avg_difficulty,
@@ -98,7 +104,7 @@ if __name__ == "__main__":
         if opt in ["-a", "--asset"]:
             asset = content
         elif opt in ["-f", "--feature"]:
-            feature = content.split(",")
+            feature = content
         elif opt in ["-t", "--task"]:
             task = content
         elif opt in ["-b", "--begin"]:
