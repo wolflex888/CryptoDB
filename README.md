@@ -82,6 +82,10 @@ The script should start running immediately given that the database was setup co
 
 ![web picture](WebIntefacePic.png)
  
+The currently available crypto currencies are Litecoin, Bitcoin, Bitcoin cash, Etherium, Etherium cash.
 
+The currently available features are tax volume(USD), adjusted tax volume(USD)	tax count, market cap(USD), price(USD), exchange volume(USD), realized cap(USD)	generated coins, fees, active addresses, average difficulty, payment count	median tax value(USD), median fee, block size, block count.
+
+The interface will query the given crypto currency and its feature with given time range (from now and 30 days (defualt) back). The day can be adjusted in the input field.
 
 # To be continued..
