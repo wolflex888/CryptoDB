@@ -13,16 +13,18 @@ def add_numbers():
     num_day = request.args.get('num_day')
     coin = request.args.get('coin')
     feature = request.args.get('feature')
-    current_time = time.time()
-    start_time = int(current_time - int(num_day)*DAY)
-    if num_day is None:
+    if num_day == "":
         num_day = 30
+    current_time = time.time()
+
+    start_time = int(current_time - int(num_day)*DAY)
+
     db = DB(assets=coin, time_begin=start_time, time_end=current_time, feature=feature)
     data = db.query()
     print(data)
     return jsonify(web_parse(data))
 
-@app.route('/')
+@app.route('/test')
 def index():
     return render_template('main.html')
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ $(function() {
           data: data,
           columns: [
             { title: "Date" },
-            { title: "Val." },
+            { title: "Value" },
             ],
         searching: false
         })
@@ -22,7 +22,7 @@ $(function() {
           data: data,
           columns: [
             { title: "Date" },
-            { title: "Val." },
+            { title: "Value" },
             ],
         searching: false
         })
