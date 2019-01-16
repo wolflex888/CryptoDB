@@ -190,7 +190,6 @@ class CoinMetrics:
                 self.DBsession.add(new_row)
                 self.DBsession.flush()
                 current_entry_id = new_row.entry_id
-                print(current_entry_id)
                 for feature in self.coin[coin_abb][timestamp]:
                     self.insert_database(value=self.coin[coin_abb][timestamp][feature], \
                                         entry_id=current_entry_id, \
