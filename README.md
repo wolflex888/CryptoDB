@@ -35,7 +35,7 @@ The desired crypto coin should be separated with comma only
 
 `default asset is btc,bch,ltc,eth,etc`
 
-The initial run takes approximately 192 seconds. It takes 18.92 seconds to download the data from the CoinMetrics API, and 79 seconds (182.51 seconds previously) to insert the rows into the database.
+The initial run takes approximately 98 seconds (previously 192 seconds). It takes 18.92 seconds to download the data from the CoinMetrics API, and 79 seconds (182.51 seconds previously) to insert the rows into the database.
 
 
 ## Query 
