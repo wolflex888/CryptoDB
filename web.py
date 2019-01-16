@@ -15,7 +15,8 @@ def add_numbers():
     feature = request.args.get('feature')
     current_time = time.time()
     start_time = int(current_time - int(num_day)*DAY)
-    print(coin, feature, num_day)
+    if num_day is None:
+        num_day = 30
     db = DB(assets=coin, time_begin=start_time, time_end=current_time, feature=feature)
     data = db.query()
     print(data)

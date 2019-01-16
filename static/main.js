@@ -12,7 +12,7 @@ $(function() {
           data: data,
           columns: [
             { title: "Date" },
-            { title: "Vale" },
+            { title: "Val." },
             ],
         searching: false
         })
@@ -22,7 +22,7 @@ $(function() {
           data: data,
           columns: [
             { title: "Date" },
-            { title: "Value" },
+            { title: "Val." },
             ],
         searching: false
         })
@@ -32,4 +32,3 @@ $(function() {
     return false;
   });
 });
-var $SCRIPT_ROOT = '{{ request.script_root|tojson|safe }}'; 
