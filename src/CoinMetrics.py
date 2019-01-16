@@ -107,67 +107,67 @@ class CoinMetrics:
         if feature == "activeaddresses":
             new_row = active_address(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "adjustedtxvolume(usd)":
             new_row = adjusted_tx_volume(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "averagedifficulty":
             new_row = avg_difficulty(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "blockcount":
             new_row = block_count(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "blocksize":
             new_row = block_size(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "exchangevolume(usd)":
             new_row = exchange_volume(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "fees":
             new_row = fees(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "generatedcoins":
             new_row = generated_coins(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "marketcap(usd)":
             new_row = market_cap(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "medianfee":
             new_row = median_fee(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "mediantxvalue(usd)":
             new_row = median_tx_value(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "paymentcount":
             new_row = payment_count(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "price(usd)":
             new_row = price(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "realizedcap(usd)":
             new_row = realized_cap(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "txcount":
             new_row = tx_count(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         elif feature == "txvolume(usd)":
             new_row = tx_volume(entry_id=entry_id, value=value)
             self.DBsession.add(new_row)
-            self.DBsession.commit()
+
         else:
             raise ValueError("unexpected feature to insert into database: %s"%(feature))
             
@@ -186,15 +186,16 @@ class CoinMetrics:
             current_coin_code = COIN_CODE[coin_abb]
             for timestamp in self.coin[coin_abb]:
                 new_row = coin_date(coin_type=current_coin_code, unix_date=timestamp)
+                
                 self.DBsession.add(new_row)
-                self.DBsession.commit()
-                # self.DBsession.refresh(new_row)
+                self.DBsession.flush()
                 current_entry_id = new_row.entry_id
-                # print(current_entry_id)
+                print(current_entry_id)
                 for feature in self.coin[coin_abb][timestamp]:
                     self.insert_database(value=self.coin[coin_abb][timestamp][feature], \
                                         entry_id=current_entry_id, \
                                         feature = feature)
+        self.DBsession.commit()
         time_used = time.time() - start_time
         print("completed. time used to update data: ", time_used)
 if __name__ == "__main__":
