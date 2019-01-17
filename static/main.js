@@ -47,7 +47,12 @@ function getValueUsingParentTag(){
 	
 	/* we join the array separated by the comma */
 	var selected;
-	selected = chkArray.join(',') ;
+  selected = chkArray.join(',') ;
+  
+  
+  if(selected.length <= 0){
+		alert("Please at least check one of the checkbox");	
+	}
 	
 	/* check if there is selected checkboxes, by default the length is 1 as it contains one single comma */
   return selected
