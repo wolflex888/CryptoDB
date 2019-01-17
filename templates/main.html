@@ -13,13 +13,15 @@
 <h1>CoinDB Demo</h1>
 
 
-<p>Crypto Currency Type: <select id="selected_coin">
-  <option value="btc">Bitcoin</option>
-  <option value="bch">Bitcoin Cash</option>
-  <option value="ltc">Litecoin</option>
-  <option value="eth">Etherium</option>
-  <option value="etc">Etherium Cash</option>
-</select></p>
+<p>Crypto Currency Type: </p>
+<div id="checkboxlist">
+<div><input type="checkbox" name="Bitcoin" value="btc" class="asset">Bitcoin</div>  
+<div><input type="checkbox" name="Bitcoin Cash" value="bch" class="asset">Bitcoin cash</div>  
+<div><input type="checkbox" name="Litecoin" value="ltc" class="asset">Litecoin</div>  
+<div><input type="checkbox" name="Etherium" value="eth" class="asset">Etherium</div>
+<div><input type="checkbox" name="Etherium cash" value="etc" class="asset">Etherium cash</div>  
+</div>
+
 <p>Time Range:  
 <input type=text size=5 name="num_day"> days </p>
 <p>Desired Feature: <select id="selected_feature">

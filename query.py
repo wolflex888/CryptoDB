@@ -40,15 +40,25 @@ def parse(result={}):
     for key in result:
         print("time_stamp\t%s"%(key))
         for element in result[key]:
-            print("%s\t%s"%(datetime.datetime.fromtimestamp(element[0]).strftime("%m-%d-%Y"), element[1]))
+            print("%s\t%s"%(datetime.datetime.fromtimestamp(element[0]).strftime("%Y-%m-%d"), element[1]))
         print("=================================================================================")
 
-def web_parse(result={}):
-    array = []
-    for key in result:
-        for element in result[key]:
-            array.append([str(datetime.datetime.fromtimestamp(element[0]).strftime("%m-%d-%Y")), str(element[1])])
-    return array
+def web_parse(result={}, coinset=[]):
+    parsed_result = {}
+    parsed_result["coin_set"] = result['coin_set']
+    parsed_result["rows"] = []
+    i = 0
+    # print(result)
+    print(min(result['timestamp_collection'].keys()))
+    for timestamp in result['timestamp_collection']:
+        parsed_result['rows'].append([datetime.datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d")])
+        for coin in coinset:
+            # print("pass!")
+            tmp_holder = result['timestamp_collection'][timestamp][COIN_CODE[coin]+1]
+            parsed_result['rows'][i].append(tmp_holder)
+        i+=1
+    # print(len(parsed_result['rows']), len(result['timestamp_collection']), i)
+    return parsed_result
 def check_date(date=None):
     if re.match(r"[0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9]", date):
         return True
@@ -60,7 +70,7 @@ class DB:
 
         self.begin = time_begin
         self.end = time_end
-        self.coin_code = COIN_CODE[assets]
+        self.coin_arr = assets
         DBSession = sessionmaker(bind=ENGINE)
         self.DBsession = DBSession()
         self.feature = feature.split(",")
@@ -80,10 +90,37 @@ class DB:
                         "realizedcap": realized_cap,
                         "txcount": tx_count,
                         "txvolume": tx_volume}
+    def web_query(self):
+
+        result = {}
+        result['coin_set'] = [{"title": "Date"}]
+        result['timestamp_collection'] = {}
+        for coin in self.coin_arr:
+            cur_coin = COIN_CODE[coin]
+            tmp_obj = self.feature_dict[self.feature[0]]
+            result['coin_set'].append({"title": coin})
+            for a, b in self.DBsession.query(coin_date, tmp_obj)\
+                        .filter(coin_date.coin_type==cur_coin)\
+                        .filter(coin_date.entry_id==tmp_obj.entry_id)\
+                        .filter(coin_date.unix_date > self.begin)\
+                        .filter(coin_date.unix_date < self.end)\
+                        .all():
+                if a.unix_date in result['timestamp_collection']:
+                    result['timestamp_collection'][a.unix_date][cur_coin+1]=float(b.value)
+                else:
+                    #each timestamp has 0 - 5 (6 elements) the index is the coin code
+                    result['timestamp_collection'][a.unix_date] = [None]
+                    for i in range(5):
+                        result['timestamp_collection'][a.unix_date].append(None)
+                    result['timestamp_collection'][a.unix_date][cur_coin+1]=float(b.value)
+
+
+        return result
     def query(self):
         result = {}
 
         for curr_feature in self.feature:
+            self.coin_code = COIN_CODE[self.coin_arr]
             result[curr_feature] = []
             tmp_obj = self.feature_dict[curr_feature]
             for a, b in self.DBsession.query(coin_date, tmp_obj)\
