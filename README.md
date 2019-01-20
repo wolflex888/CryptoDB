@@ -80,7 +80,7 @@ The script should start running immediately given that the database was setup co
  The given internet address with "test" (`http://127.0.0.1:5000/test`) should direct you to the coinDB web interface page. The interface is shown below:
 
 
-![web picture](WebIntefacePic.png)
+![web picture](v2.png)
  
 The currently available crypto currencies are Litecoin, Bitcoin, Bitcoin cash, Etherium, Etherium cash.
 
