@@ -52,9 +52,9 @@ def web_parse(result={}, coinset=[]):
     print(min(result['timestamp_collection'].keys()))
     for timestamp in result['timestamp_collection']:
         parsed_result['rows'].append([datetime.datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d")])
-        for coin in coinset:
+        for coin in coinset: #given the required coinset, what is the value of each.
             # print("pass!")
-            tmp_holder = result['timestamp_collection'][timestamp][COIN_CODE[coin]+1]
+            tmp_holder = result['timestamp_collection'][timestamp][COIN_CODE[coin]+1] #first one is date
             parsed_result['rows'][i].append(tmp_holder)
         i+=1
     # print(len(parsed_result['rows']), len(result['timestamp_collection']), i)
@@ -93,12 +93,13 @@ class DB:
     def web_query(self):
 
         result = {}
-        result['coin_set'] = [{"title": "Date"}]
-        result['timestamp_collection'] = {}
+        result['coin_set'] = [{"title": "Date"}] # for column title
+        result['timestamp_collection'] = {} # each time stamp have its own dictionary
         for coin in self.coin_arr:
             cur_coin = COIN_CODE[coin]
             tmp_obj = self.feature_dict[self.feature[0]]
             result['coin_set'].append({"title": coin})
+            # join table and search according to given coordinate.
             for a, b in self.DBsession.query(coin_date, tmp_obj)\
                         .filter(coin_date.coin_type==cur_coin)\
                         .filter(coin_date.entry_id==tmp_obj.entry_id)\
@@ -111,7 +112,7 @@ class DB:
                     #each timestamp has 0 - 5 (6 elements) the index is the coin code
                     result['timestamp_collection'][a.unix_date] = [None]
                     for i in range(5):
-                        result['timestamp_collection'][a.unix_date].append(None)
+                        result['timestamp_collection'][a.unix_date].append(None) #initialize each coin as null
                     result['timestamp_collection'][a.unix_date][cur_coin+1]=float(b.value)
 
 

@@ -188,13 +188,13 @@ class CoinMetrics:
                 new_row = coin_date(coin_type=current_coin_code, unix_date=timestamp)
                 
                 self.DBsession.add(new_row)
-                self.DBsession.flush()
+                self.DBsession.flush() #get id number
                 current_entry_id = new_row.entry_id
                 for feature in self.coin[coin_abb][timestamp]:
                     self.insert_database(value=self.coin[coin_abb][timestamp][feature], \
                                         entry_id=current_entry_id, \
                                         feature = feature)
-        self.DBsession.commit()
+        self.DBsession.commit() #commit at last to save time
         time_used = time.time() - start_time
         print("completed. time used to update data: ", time_used)
 if __name__ == "__main__":
